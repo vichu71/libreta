@@ -1,0 +1,20 @@
+# Flutter/Dart/Pub specific
+.dart_tool/
+.packages
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+.generated/
+build/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+*.iml
+.idea/
+*.lock
+*.log
+android/.gradle
+android/app/build/
+*.apk
+*.aab
+# macOS
+*.DS_Store
