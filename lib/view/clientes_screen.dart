@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart ';
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import '../ddbb/capanegra_ddbb.dart';
 import 'detallecliente_screen.dart';
@@ -46,6 +46,43 @@ class _ClientesScreenState extends State<ClientesScreen> {
     setState(() {}); // Refrescar la lista
   }
 
+  void _mostrarDialogoEliminarCliente(int clienteId, String clienteNombre) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: const Text(
+            'Eliminar Cliente',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            '¿Estás seguro de que deseas eliminar al cliente "$clienteNombre"?',
+            style: const TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _borrarCliente(clienteId);
+              },
+              child: const Text('Eliminar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +94,6 @@ class _ClientesScreenState extends State<ClientesScreen> {
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
-
       body: flutter.Column(
         children: [
           Padding(
@@ -75,34 +111,31 @@ class _ClientesScreenState extends State<ClientesScreen> {
                 const SizedBox(height: 20),
                 Center(
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 1.8, // 80% del ancho de la pantalla
-                    height: MediaQuery.of(context).size.height * 0.15,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: OutlinedButton(
                       onPressed: _guardarCliente,
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.blue, width: 2), // Borde azul
+                        side: const BorderSide(color: Colors.blue, width: 2),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8), // Bordes redondeados
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 16), // Altura del botón
-                        backgroundColor: Colors.white, // Fondo blanco
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: Colors.white,
                       ),
                       child: const Text(
                         'Crear Cliente',
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue, // Letras azules
+                          color: Colors.blue,
                         ),
                       ),
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
-
           const SizedBox(height: 10),
           const Padding(
             padding: EdgeInsets.all(8.0),
@@ -123,15 +156,15 @@ class _ClientesScreenState extends State<ClientesScreen> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.white, // Borde blanco
-                  width: 2, // Grosor del borde
+                  color: Colors.white,
+                  width: 2,
                 ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 3,
                     blurRadius: 7,
-                    offset: const Offset(0, 3), // Sombra hacia abajo
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -186,7 +219,8 @@ class _ClientesScreenState extends State<ClientesScreen> {
                                 color: Colors.redAccent,
                               ),
                               onPressed: () {
-                                _borrarCliente(cliente.id);
+                                _mostrarDialogoEliminarCliente(
+                                    cliente.id, cliente.nombre);
                               },
                             ),
                             title: Text(
@@ -210,7 +244,6 @@ class _ClientesScreenState extends State<ClientesScreen> {
               ),
             ),
           ),
-
         ],
       ),
     );
